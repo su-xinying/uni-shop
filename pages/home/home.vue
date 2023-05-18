@@ -27,7 +27,8 @@
         <view class="floor-img-box">
           <!-- 左侧大图片的盒子 -->
           <navigator class="left-img-box" :url="item.product_list[0].url">
-            <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}" mode="widthFix"></image>
+            <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}" mode="widthFix">
+            </image>
           </navigator>
           <!-- 右侧 4 个小图片的盒子 -->
           <view class="right-img-box">
@@ -54,9 +55,11 @@
       };
     },
     onLoad() {
-      // 调用方法，获取轮播图的数据
+      // 获取轮播图数据
       this.getSwiperList()
+      //获取分类导航数据
       this.getNavList()
+      // 获取楼层数据
       this.getFloorList()
     },
     methods: {
@@ -71,7 +74,9 @@
         if (res.meta.status !== 200) return uni.$showMsg()
         this.navList = res.message
       },
+      // nav-item 项被点击时候的事件处理函数
       navClickHandler(item) {
+        // 判断点击的是哪个 nav
         if (item.name === '分类') {
           uni.switchTab({
             url: '/pages/cate/cate'
