@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		商品详情页面
 	</view>
 </template>
 
