@@ -56,7 +56,7 @@
 				this.inputValue = +val;
 			},
 			inputValue(newVal, oldVal) {
-				if (+newVal !== +oldVal) {
+				if (+newVal !== +oldVal && Number(newVal) && String(newVal).indexOf('.')===-1) {
 					this.$emit("change", newVal);
 				}
 			}
@@ -101,9 +101,14 @@
 				return scale;
 			},
 			_onBlur(event) {
-				let value = event.detail.value;
+        // 官方的代码没有进行数值转换，用户输入的 value 值可能是非法字符：
+				// let value = event.detail.value;
+        // 如果是小数 就转换成整数
+        let value = parseInt(event.detail.value);
+        // 如果转化之后的结果为 NaN，则给定默认值为 1
 				if (!value) {
-					// this.inputValue = 0;
+          // 强制为1
+					this.inputValue = 1;
 					return;
 				}
 				value = +value;

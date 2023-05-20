@@ -40,7 +40,26 @@
 </template>
 
 <script>
+  import {
+    mapMutations,
+    mapGetters
+  } from 'vuex'
   export default {
+    computed: {
+      ...mapGetters('cart', ['total'])
+    },
+    watch: {
+      total: {
+        handler(newVal) {
+          const findResult = this.options.find(item => item.text === '购物车')
+          if (findResult) {
+            // 动态为购物车按钮的 info 属性赋值
+            findResult.info = newVal
+          }
+        },
+        immediate: true
+      }
+    },
     data() {
       return {
         // 商品详情数据
@@ -54,7 +73,7 @@
         }, {
           icon: 'cart',
           text: '购物车',
-          info: 2
+          info: 0
         }],
         buttonGroup: [{
             text: '加入购物车',
@@ -77,6 +96,7 @@
       this.getGoodsDetail(goods_id)
     },
     methods: {
+      ...mapMutations('cart', ['addToCartList']),
       async getGoodsDetail(goods_id) {
         const {
           data: res
@@ -107,6 +127,23 @@
             url: '/pages/cart/cart'
           })
         }
+      },
+      buttonClick(e) {
+        if (e.content.text === '加入购物车') {
+          // 组织一个商品的信息对象
+          const goods = {
+            goods_id: this.goodsDetail.goods_id, // 商品的Id
+            goods_name: this.goodsDetail.goods_name, // 商品的名称
+            goods_price: this.goodsDetail.goods_price, // 商品的价格
+            goods_count: 1, // 商品的数量
+            goods_small_logo: this.goodsDetail.goods_small_logo, // 商品的图片
+            goods_state: true // 商品的勾选状态
+          }
+          // 把商品信息对象存储在vuex中的购物车数组中
+          this.addToCartList(goods)
+
+        }
+
       }
     },
   }
@@ -160,14 +197,16 @@
     }
 
   }
-  .goods-detail-container{
+
+  .goods-detail-container {
     // 防止页面内容被底部的商品导航组件遮盖
     padding-bottom: 50px;
   }
-  .goods_nav{
+
+  .goods_nav {
     // 给商品导航组件固定定位
     position: fixed;
-    bottom:0;
+    bottom: 0;
     left: 0;
     width: 100%;
   }

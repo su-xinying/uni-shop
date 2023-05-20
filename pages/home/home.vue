@@ -31,7 +31,8 @@
         <view class="floor-img-box">
           <!-- 左侧大图片的盒子 -->
           <navigator class="left-img-box" :url="item.product_list[0].url">
-            <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}" mode="widthFix">
+            <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}"
+              mode="widthFix">
             </image>
           </navigator>
           <!-- 右侧 4 个小图片的盒子 -->
@@ -47,7 +48,11 @@
 </template>
 
 <script>
+  // 导入自己封装的 mixin 模块
+  import badgeMix from '@/mixins/tabbar-badge.js'
   export default {
+    // 将 badgeMix 混入到当前的页面中进行使用
+    mixins: [badgeMix],
     data() {
       return {
         // 这是轮播图的数据列表
@@ -68,13 +73,17 @@
     },
     methods: {
       async getSwiperList() {
-        const { data: res } = await uni.$http.get('/api/public/v1/home/swiperdata')
+        const {
+          data: res
+        } = await uni.$http.get('/api/public/v1/home/swiperdata')
         // 请求失败
         if (res.meta.status !== 200) return uni.$showMsg()
         this.swiperList = res.message
       },
       async getNavList() {
-        const { data: res } = await uni.$http.get('/api/public/v1/home/catitems')
+        const {
+          data: res
+        } = await uni.$http.get('/api/public/v1/home/catitems')
         if (res.meta.status !== 200) return uni.$showMsg()
         this.navList = res.message
       },
@@ -89,7 +98,9 @@
       },
       // 获取首页楼层数据的方法
       async getFloorList() {
-        const { data: res } = await uni.$http.get('/api/public/v1/home/floordata')
+        const {
+          data: res
+        } = await uni.$http.get('/api/public/v1/home/floordata')
         if (res.meta.status !== 200) return uni.$showMsg()
 
         // 对数据进行处理
@@ -101,9 +112,9 @@
         })
         this.floorList = res.message
       },
-      gotoSearch(){
+      gotoSearch() {
         uni.navigateTo({
-          url:'/subpkg/search/search'
+          url: '/subpkg/search/search'
         })
       }
     }
@@ -147,7 +158,8 @@
     display: flex;
     padding-left: 10rpx;
   }
-  .search-box{
+
+  .search-box {
     // 设置定位效果为吸顶
     position: sticky;
     // 吸顶位置
